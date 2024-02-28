@@ -186,6 +186,10 @@ PublishScripts/
 *.nupkg
 # NuGet Symbol Packages
 *.snupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/[Pp]ackages/repositories.config
 # NuGet v3's project.json files produces more ignorable files
@@ -344,17 +348,3 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-
-# Nuxt.js build / generate output
-.nuxt
-dist
-dist-types
-dist-workspace
-
-# Coverage directory used by tools like istanbul
-coverage
-*.lcov
-
-# cypress screenshots and videos output
-
-**/cypress-out/
