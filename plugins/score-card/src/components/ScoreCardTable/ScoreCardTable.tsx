@@ -45,13 +45,11 @@ const useScoringAllDataLoader = (entityKindFilter?: string[]) => {
 
 type ScoreTableProps = {
   title?: string;
-  entityLinkPath?: string;
-  excludedColumns?: string[]; // List of columns that should not be shown
   scores: EntityScoreExtended[];
 };
 
-export const ScoreTable = ({ title, scores, excludedColumns, entityLinkPath }: ScoreTableProps) => {
-  let columns: TableColumn<EntityScoreExtended>[] = [
+export const ScoreTable = ({ title, scores }: ScoreTableProps) => {
+  const columns: TableColumn<EntityScoreExtended>[] = [
     {
       title: 'Name',
       field: 'entityRef.name',
@@ -61,7 +59,7 @@ export const ScoreTable = ({ title, scores, excludedColumns, entityLinkPath }: S
         }
 
         return (<Link
-          to={`/catalog/${entityScore.entityRef.namespace ?? DEFAULT_NAMESPACE}/${entityScore.entityRef.kind}/${entityScore.entityRef.name}/${entityLinkPath ?? 'score'}`}
+          to={`/catalog/${entityScore.entityRef.namespace ?? DEFAULT_NAMESPACE}/${entityScore.entityRef.kind}/${entityScore.entityRef.name}/score`}
           data-id={entityScore.entityRef.name}
           >
             {entityScore.entityRef.name}
@@ -117,24 +115,7 @@ export const ScoreTable = ({ title, scores, excludedColumns, entityLinkPath }: S
         return areas;
       areas.push(area.title);
       columns.push({
-        title: (
-          <div style={{ textAlign: 'center', marginLeft: '18px' }}> {/* marginLeft is to center properly considering the sort icon on the right :) */}
-            {area.title}
-
-            {
-              area.scoreWeight && <div style={{
-                opacity: '0.8',
-                fontWeight: 'normal',
-                fontSize: '12px',
-                height: 'auto',
-                marginTop: '4px',
-                fontVariant: 'small-caps'
-              }}>
-                {area.scoreWeight}
-              </div>
-            }
-          </div>
-        ),
+        title: area.title,
         field: 'n/a',
         customSort: (d1, d2) => {
           const d1ScoreEntry = d1?.areaScores
@@ -147,7 +128,6 @@ export const ScoreTable = ({ title, scores, excludedColumns, entityLinkPath }: S
           if (!d2ScoreEntry || d2ScoreEntry < d1ScoreEntry) return 1;
           return 0;
         },
-        align: 'center',
         render: entityScoreEntry => {
           const currentScoreEntry = entityScoreEntry?.areaScores
             ? entityScoreEntry.areaScores.find(a => a.title === area.title)
@@ -193,10 +173,6 @@ export const ScoreTable = ({ title, scores, excludedColumns, entityLinkPath }: S
     },
   });
 
-  if (excludedColumns) {
-    columns = columns.filter(c => c.title && excludedColumns.indexOf(c.title!.toString().toLocaleLowerCase()) === -1)
-  }
-
   // in case we have less then 10 entities let's show at least 10 rows
   const minDefaultPageSizeOption = scores.length >= 10 ? scores.length : 10;
   // so in case we have less then 100 entities we want to see them all in one page after load
@@ -235,11 +211,9 @@ export const ScoreTable = ({ title, scores, excludedColumns, entityLinkPath }: S
 
 type ScoreCardTableProps = {
   title?: string;
-  entityLinkPath?: string;
   entityKindFilter?: string[];
-  excludedColumns?: string[];
 };
-export const ScoreCardTable = ({title, entityKindFilter, excludedColumns, entityLinkPath}: ScoreCardTableProps) => {
+export const ScoreCardTable = ({title, entityKindFilter}: ScoreCardTableProps) => {
   const { loading, error, value: data } = useScoringAllDataLoader(entityKindFilter);
 
   if (loading) {
@@ -248,11 +222,5 @@ export const ScoreCardTable = ({title, entityKindFilter, excludedColumns, entity
     return getWarningPanel(error);
   }
 
-  return (
-      <ScoreTable 
-            excludedColumns={excludedColumns} 
-            entityLinkPath={entityLinkPath}
-            title={title}  
-            scores={data || []} />
-  );
+  return <ScoreTable title={title}  scores={data || []} />;
 };

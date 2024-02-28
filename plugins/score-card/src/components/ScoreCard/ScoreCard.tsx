@@ -85,21 +85,9 @@ const useScoringDataLoader = () => {
 };
 
 export const ScoreCard = ({
-  title,
-  tableTitle,
-  showError = true,
-  emptyElement = <EmptyState
-    missing="info"
-    title="No information to display"
-    description="There is no data available for this entity"
-  />,
   variant = 'gridItem',
 }: {
-  title?: string;
-  tableTitle?: string;
   entity?: Entity;
-  emptyElement?: JSX.Element;
-  showError?: boolean;
   variant?: InfoCardVariants;
 }) => {
   // let's load the entity data from url defined in config etc
@@ -137,7 +125,7 @@ export const ScoreCard = ({
 
   return (
     <InfoCard
-      title={title ?? "Scoring"}
+      title="Scoring"
       variant={variant}
       headerProps={{
         action: qualityBadge,
@@ -149,11 +137,15 @@ export const ScoreCard = ({
     >
       {loading && <Progress />}
 
-      {showError && error && getWarningPanel(error)}
+      {error && getWarningPanel(error)}
 
       {!loading && !data && (
         <div data-testid="score-card-no-data">
-          {emptyElement}
+          <EmptyState
+            missing="info"
+            title="No information to display"
+            description="There is no data available for this entity"
+          />
         </div>
       )}
 
@@ -169,7 +161,7 @@ export const ScoreCard = ({
             spacing={0}
           >
             <Table<EntityScoreTableEntry>
-              title={tableTitle ?? "Score of each requirement"}
+              title="Score of each requirement"
               options={{
                 search: true,
                 paging: false,

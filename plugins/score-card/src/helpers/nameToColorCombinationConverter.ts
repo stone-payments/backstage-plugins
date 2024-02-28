@@ -10,12 +10,12 @@ const CUSTOM_COLOR_COMBINATION_INLINE_REGEXP: RegExp = /^#[0-9a-f]{6,8}\s+#[0-9a
 
 const defaultColorCombinations: { [name: string]: string[] } = {
   // Extra details colors based on score
-  "extra-details-failure": ["#741f1f", "#ffe8e8"],
-  "extra-details-almost-failure": ["#741f1f", "#ffe8e8"],
-  "extra-details-partial": ["#741f1f", "#ffe8e8"],
-  "extra-details-almost-success": ["#741f1f", "#ffe8e8"],
+  "extra-details-failure": ["#5a0000", "#ff000022"],
+  "extra-details-almost-failure": ["#5a0000", "#ff000022"],
+  "extra-details-partial": ["#5a0000", "#ff000022"],
+  "extra-details-almost-success": ["#0f4a0f", "#72af5026"],
   "extra-details-success": ["#0f4a0f", "#72af5026"],
-  "extra-details-unknown": ["#555555", "#CCCCCC"],
+  "extra-details-unknown": ["#FFFFFF", "#001F3F"],
   // Score colors
   // see palette https://coolors.co/72af50-acbf8c-e2e8b3-ffc055-eb6f35
   "score-success": ["rgba(0, 0, 0, 0.87)", 'rgb(114, 175, 80)'],

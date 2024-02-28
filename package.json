@@ -1,12 +1,12 @@
 {
-  "name": "backstage-plugin-score-card",
+  "name": "ori-backstage-plugins",
   "description": "Oriflame plugins for Backstage.",
   "maintainers": [
     "jvilimek@users.noreply.github.com",
     "OSWDVLPPlatform@oriflame.com",
     "GlobalITCOEdevelopmentTooling@Oriflame.com"
   ],
-  "version": "0.7.4",
+  "version": "0.1.19",
   "private": true,
   "engines": {
     "node": "14 || 16"
@@ -73,16 +73,5 @@
     "*.md": [
       "node ./scripts/check-docs-quality"
     ]
-  },
-  "main": "tsconfig.sjon",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gadsilva/backstage-plugins.git#feat-interface-additions"
-  },
-  "author": "oriflame",
-  "license": "LGPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/gadsilva/backstage-plugins/issues"
-  },
-  "homepage": "https://github.com/gadsilva/backstage-plugins/tree/feat-interface-additions#readme"
+  }
 }

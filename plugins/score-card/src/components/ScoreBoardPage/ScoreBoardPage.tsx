@@ -29,8 +29,6 @@ type ScoreBoardPageProps = {
   title?: string;
   subTitle?: string;
   tableTitle?: string;
-  entityLinkPath?: string;
-  excludedColumns?: string[];
   entityKindFilter?: string[];
 };
 
@@ -38,8 +36,6 @@ export const ScoreBoardPage = ({
   title,
   subTitle,
   tableTitle,
-  entityLinkPath,
-  excludedColumns,
   entityKindFilter,
 }: ScoreBoardPageProps) => (
   <Page themeId="tool">
@@ -61,8 +57,6 @@ export const ScoreBoardPage = ({
           <ScoreCardTable
             title={tableTitle}
             entityKindFilter={entityKindFilter}
-            excludedColumns={excludedColumns}
-            entityLinkPath={entityLinkPath}
           />
         </Grid>
       </Grid>
