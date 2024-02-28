@@ -144,7 +144,6 @@ describe('ScoringDataJsonClient-getAllScores', () => {
       {
         "areaScores": [],
         "entityRef": {"kind": "api", "name": "Api 1"},
-        "id": "api:default/api 1",
         "owner": {"kind": "group", "name": "team1", "namespace": "default"},
         "reviewDate": new Date('2022-01-01T08:00:00.000Z'),
         "reviewer": {"kind": "User", "name": "Reviewer 1", "namespace": "default"},
@@ -155,7 +154,6 @@ describe('ScoringDataJsonClient-getAllScores', () => {
       {
         "areaScores": [],
         "entityRef": {"kind": "system", "name": "System 1"},
-        "id": "system:default/system 1",
         "owner": {"kind": "group", "name": "team2", "namespace": "default"},
         "reviewDate": new Date('2022-01-01T08:00:00.000Z'),
         "reviewer": {"kind": "User", "name": "Reviewer 2", "namespace": "default"},
@@ -193,7 +191,6 @@ describe('ScoringDataJsonClient-getAllScores', () => {
       {
         "areaScores": [],
         "entityRef": {"kind": "api", "name": "Api 1"},
-        "id": "api:default/api 1",
         "owner": {"kind": "group", "name": "team1", "namespace": "default"},
         "reviewDate": new Date('2022-01-01T08:00:00.000Z'),
         "reviewer": {"kind": "User", "name": "Reviewer 1", "namespace": "default"},
@@ -204,7 +201,6 @@ describe('ScoringDataJsonClient-getAllScores', () => {
       {
         "areaScores": [],
         "entityRef": {"kind": "system", "name": "System 1"},
-        "id": "system:default/system 1",
         "owner": {"kind": "group", "name": "team2", "namespace": "default"},
         "reviewDate": new Date('2022-01-01T08:00:00.000Z'),
         "reviewer": {"kind": "User", "name": "Reviewer 2", "namespace": "default"},
@@ -241,7 +237,6 @@ describe('ScoringDataJsonClient-getAllScores', () => {
       {
         "areaScores": [],
         "entityRef": {"kind": "api", "name": "Api 1"},
-        "id": "api:default/api 1",
         "owner": {"kind": "group", "name": "team1", "namespace": "default"},
         "reviewDate": new Date('2022-01-01T08:00:00.000Z'),
         "reviewer": {"kind": "User", "name": "Reviewer 1", "namespace": "default"},

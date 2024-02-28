@@ -7,12 +7,12 @@ on:
         description: 'Create release'
         required: true
         type: boolean
-        default: true
+        default: 'true'
       publish_packages:
         description: 'Publish npm packages'
         required: true
         type: boolean
-        default: true
+        default: 'true'
   push:
     branches: [main]
 
@@ -25,7 +25,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [16.x]
 
     env:
       CI: true
@@ -37,16 +37,16 @@ jobs:
         run: if [ '${{ github.event.before }}' = '0000000000000000000000000000000000000000' ]; then echo "::warning title=Missing github.event.before::You are running this CD workflow on a newly created branch. Release won't be created..."; fi
 
       - name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v3
 
-      - name: use node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: https://registry.npmjs.org/ # Needed for auth
 
       - name: yarn install --frozen-lockfile
-        uses: backstage/actions/yarn-install@v0.6.5
+        uses: backstage/actions/yarn-install@v0.5.13
         with:
           cache-prefix: ${{ runner.os }}-v${{ matrix.node-version }}
 
@@ -76,6 +76,9 @@ jobs:
       - name: verify type dependencies
         run: yarn lint:type-deps
 
+      - name: test
+        run: |
+          yarn lerna -- run test -- --coverage --runInBand
 
   # A separate release build that is only run for commits that are the result of merging the "Version Packages" PR
   # We can't re-use the output from the above step, but we'll have a guaranteed node_modules cache and
@@ -89,7 +92,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [16.x]
 
     env:
       CI: 'true'
@@ -97,16 +100,16 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v3
 
-      - name: use node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: https://registry.npmjs.org/ # Needed for auth
 
       - name: yarn install --frozen-lockfile
-        uses: backstage/actions/yarn-install@v0.6.5
+        uses: backstage/actions/yarn-install@v0.5.13
         with:
           cache-prefix: ${{ runner.os }}-v${{ matrix.node-version }}
 
@@ -120,11 +123,10 @@ jobs:
       - name: publish
         if: needs.build.outputs.needs_release == 'true' || github.event.inputs.publish_packages
         run: |
-          yarn config set -H 'npmAuthToken' "${{secrets.NPM_TOKEN}}"
           if [ -f ".changeset/pre.json" ]; then
-          yarn workspaces foreach --all --verbose --no-private npm publish --access public --tolerate-republish --tag next
+              yarn lerna -- publish from-package --yes --dist-tag next
           else
-              yarn workspaces foreach --all --verbose --no-private npm publish --access public --tolerate-republish
+              yarn lerna -- publish from-package --yes
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

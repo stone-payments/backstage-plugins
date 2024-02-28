@@ -22,8 +22,6 @@ import {
   CompoundEntityRef,
   parseEntityRef,
   RELATION_OWNED_BY,
-  DEFAULT_NAMESPACE,
-  stringifyEntityRef,
 } from '@backstage/catalog-model';
 
 /**
@@ -56,18 +54,14 @@ export class ScoringDataJsonClient implements ScoringDataApi {
     }
 
     const jsonDataUrl = this.getJsonDataUrl();
-    const urlWithData = `${jsonDataUrl}${entity.metadata.namespace ?? DEFAULT_NAMESPACE}/${entity.kind}/${entity.metadata.name}.json`.toLowerCase();
+    const urlWithData = `${jsonDataUrl}${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name}.json`.toLowerCase();
 
-    this.logConsole(`ScoringDataJsonClient: fetching score from: ${urlWithData}`);
-    const result: EntityScore | undefined = await fetch(urlWithData).then(async res => {
+    const result: EntityScore = await fetch(urlWithData).then(res => {
       switch (res.status) {
         case 404:
-          return undefined;
+          return null;
         case 200:
-          return await res.json().then(json => {
-            this.logConsole(`result: ${JSON.stringify(json)}`);
-            return json as EntityScore;
-          });
+          return res.json();
         default:
           throw new Error(`error from server (code ${res.status})`);
       }
@@ -81,17 +75,13 @@ export class ScoringDataJsonClient implements ScoringDataApi {
   public async getAllScores(entityKindFilter?: string[]): Promise<EntityScoreExtended[] | undefined> {
     const jsonDataUrl = this.getJsonDataUrl();
     const urlWithData = `${jsonDataUrl}all.json`;
-    this.logConsole(`ScoringDataJsonClient: fetching all scored from ${urlWithData}`);
     let result: EntityScore[] | undefined = await fetch(urlWithData).then(
-      async res => {
+      res => {
         switch (res.status) {
           case 404:
             return undefined;
           case 200:
-            return await res.json().then(json => {
-              this.logConsole(`result: ${JSON.stringify(json)}`);
-              return json as EntityScore[];
-            });
+            return res.json();
           default:
             throw new Error(`error from server (code ${res.status})`);
         }
@@ -112,11 +102,11 @@ export class ScoringDataJsonClient implements ScoringDataApi {
     }, new Set<string>);
     
     const fetchAllEntities = this.configApi.getOptionalBoolean('scorecards.fetchAllEntities') ?? false
-    const response = await this.catalogApi.getEntities({
-      filter: fetchAllEntities ? undefined:  {
+        const response = await this.catalogApi.getEntities({
+      filter: fetchAllEntities ? (entityKindFilter ? {kind: entityKindFilter} : {}):  {
         'metadata.name': Array.from(entity_names)
        },
-      fields: ['kind', 'metadata.name', 'spec.owner', 'relations'],
+      fields: ['kind', 'metadata.name', 'metadata.namespace', 'spec.owner', 'relations'],
     });
     const entities: Entity[] = fetchAllEntities
       ? response.items.filter(i => entity_names.has(i.metadata.name))
@@ -128,11 +118,6 @@ export class ScoringDataJsonClient implements ScoringDataApi {
   }
 
   // ---- HELPER METHODS ---- //
-
-  private logConsole(_: string) {
-    // eslint-disable-next-line no-console
-    // DEBUG: console.log(msg);
-  }
 
   private getJsonDataUrl() {
     return (
@@ -153,26 +138,28 @@ export class ScoringDataJsonClient implements ScoringDataApi {
     }
 
     const catalogEntity = entities
-      ? entities.find(entity => entity.metadata.name === score.entityRef?.name)
-      : undefined;
+      ? entities.find(entity => 
+          entity.metadata.name === score.entityRef?.name 
+          && (!score.entityRef?.kind || entity.kind.toLowerCase() === score.entityRef?.kind.toLowerCase())
+          && (!score.entityRef?.namespace || (entity.metadata.namespace || 'default').toLowerCase() == score.entityRef?.namespace.toLowerCase())
+      ) : undefined;
 
     const owner = catalogEntity?.relations?.find(
       r => r.type === RELATION_OWNED_BY,
     )?.targetRef;
 
-    let reviewer = undefined;
+    let reviewer: CompoundEntityRef | undefined = undefined;
     if (score.scoringReviewer && !(score.scoringReviewer as CompoundEntityRef)?.name) {
       reviewer = { name: score.scoringReviewer as string, kind: 'User', namespace: 'default' };
     } else if ((score.scoringReviewer as CompoundEntityRef)?.name) {
       const scoringReviewer = score.scoringReviewer as CompoundEntityRef
-      reviewer = { name: scoringReviewer.name, kind: scoringReviewer?.kind ?? "User", namespace: scoringReviewer?.namespace ?? DEFAULT_NAMESPACE };
+      reviewer = { name: scoringReviewer.name, kind: scoringReviewer?.kind ?? "User", namespace: scoringReviewer?.namespace ?? 'default' };
     }
 
     const reviewDate = score.scoringReviewDate
       ? new Date(score.scoringReviewDate)
       : undefined;
     return {
-      id: stringifyEntityRef(score.entityRef),
       owner: owner ? parseEntityRef(owner) : undefined,
       reviewer: reviewer,
       reviewDate: reviewDate,

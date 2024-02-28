@@ -1,36 +1,36 @@
 {
-  "name": "ori-backstage-plugins",
+  "name": "backstage-plugin-score-card",
   "description": "Oriflame plugins for Backstage.",
   "maintainers": [
     "jvilimek@users.noreply.github.com",
     "OSWDVLPPlatform@oriflame.com",
     "GlobalITCOEdevelopmentTooling@Oriflame.com"
   ],
-  "version": "0.2.1",
+  "version": "0.7.4",
   "private": true,
   "engines": {
-    "node": "18 || 20"
+    "node": "14 || 16"
   },
   "scripts": {
-    "dev": "concurrently 'yarn start' 'yarn start-backend' 'http-server -p 8090 --cors 2>&1'",
+    "dev": "concurrently \"yarn start\" \"yarn start-backend\" \"http-server -p 8090 --cors 2>&1\"",
     "start": "yarn workspace app start",
     "start-backend": "yarn workspace backend start",
     "build": "backstage-cli repo build --all",
     "tsc": "tsc",
-    "tsc:full": "backstage-cli repo clean && tsc --skipLibCheck true --incremental false",
-    "clean": "backstage-cli repo clean",
-    "test": "backstage-cli repo test",
-    "test:all": "backstage-cli repo test --coverage",
-    "test:e2e": "tsc && playwright test",
-    "fix": "backstage-cli repo fix",
+    "tsc:full": "backstage-cli clean && tsc --skipLibCheck true --incremental false",
+    "clean": "backstage-cli clean && lerna run clean",
+    "diff": "lerna run diff --",
+    "test": "backstage-cli test",
+    "test:all": "lerna run test -- --coverage",
+    "test:e2e": "yarn workspace app cypress run",
     "lint": "backstage-cli repo lint --since origin/main",
     "lint:all": "backstage-cli repo lint",
-    "lint:type-deps": "backstage-repo-tools type-deps",
-    "new": "backstage-cli new --scope ori --baseVersion 0.0.0 --no-private",
-    "create-plugin": "echo \"use 'yarn new' instead\"",
-    "release": "node scripts/prepare-release.js && changeset version && yarn prettier --write '{packages,plugins}/*/{package.json,CHANGELOG.md}' '.changeset/*.json' && yarn install --no-immutable",
+    "lint:type-deps": "node scripts/check-type-dependencies.js",
+    "create-plugin": "backstage-cli create-plugin --scope ori --no-private",
+    "remove-plugin": "backstage-cli remove-plugin",
+    "release": "node scripts/prepare-release.js && changeset version && yarn diff --yes && yarn prettier --write '{packages,plugins}/*/{package.json,CHANGELOG.md}' '.changeset/*.json' && yarn install",
     "prettier:check": "prettier --check .",
-    "prettier:fix": "prettier --write .",
+    "lerna": "lerna",
     "lock:check": "yarn-lock-check"
   },
   "workspaces": {
@@ -40,31 +40,26 @@
     ]
   },
   "resolutions": {
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "dockerode": "3.3.5",
-    "@types/dockerode": "3.3.23",
-    "jest-environment-jsdom": "30.0.0-alpha.2"
+    "@types/react": "^17",
+    "@types/react-dom": "^17",
+    "dockerode": "3.3.4",
+    "@types/dockerode": "3.3.9"
   },
   "dependencies": {
-    "jest-environment-jsdom": "30.0.0-alpha.2"
+    "@changesets/cli": "2.25.2"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.25.1",
-    "@backstage/e2e-test-utils": "^0.1.0",
-    "@backstage/repo-tools": "^0.5.2",
-    "@changesets/cli": "2.27.1",
-    "@playwright/test": "^1.41.1",
-    "@spotify/prettier-config": "14.1.6",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@backstage/cli": "^0.22.1",
+    "@spotify/prettier-config": "14.1.4",
     "@types/webpack": "5.28.0",
-    "concurrently": "^8.0.0",
+    "concurrently": "7.5.0",
     "eslint-plugin-notice": "0.9.10",
-    "http-server": "14.1.1",
-    "prettier": "2.8.8",
-    "react": "^18.0.0",
-    "typescript": "~5.3.0"
+    "lerna": "5.6.2",
+    "prettier": "2.7.1",
+    "typescript": "4.8.4",
+    "@types/react": "17.0.52",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "prettier": "@spotify/prettier-config",
   "lint-staged": {
@@ -79,5 +74,15 @@
       "node ./scripts/check-docs-quality"
     ]
   },
-  "packageManager": "yarn@4.0.2"
+  "main": "tsconfig.sjon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gadsilva/backstage-plugins.git#feat-interface-additions"
+  },
+  "author": "oriflame",
+  "license": "LGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/gadsilva/backstage-plugins/issues"
+  },
+  "homepage": "https://github.com/gadsilva/backstage-plugins/tree/feat-interface-additions#readme"
 }

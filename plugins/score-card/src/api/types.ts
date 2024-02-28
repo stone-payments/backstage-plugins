@@ -37,6 +37,7 @@ export interface EntityScore {
 export interface EntityScoreArea {
   id: number;
   title: string;
+  scoreWeight?: string;
   scorePercent: number;
   scoreLabel?: string;
   scoreSuccess: ScoreSuccessEnum;
@@ -46,16 +47,20 @@ export interface EntityScoreArea {
 export interface EntityScoreEntry {
   id: number;
   title: string;
+  titleLabel?: string;
+  titleLabelColor?: string;
   isOptional: boolean;
+  scoreWeight?: string;
   scorePercent: number;
   scoreLabel?: string;
   scoreSuccess: ScoreSuccessEnum;
   scoreHints: string | string[];
   details: string;
+  extraDetails?: string;
+  extraDetailsColor?: string;
 }
 
 export interface EntityScoreExtended extends EntityScore {
-  id: string;
   owner: CompoundEntityRef | undefined;
   reviewer: CompoundEntityRef | undefined;
   reviewDate: Date | undefined;
