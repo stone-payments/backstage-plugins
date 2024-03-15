@@ -78,7 +78,7 @@ export const ScoreCard = ({
   variant = 'gridItem',
 }: {
   title?: string;
-  subTitle?: string;
+  subTitle?: JSX.Element | string;
   tableTitle?: string;
   entity?: Entity;
   emptyElement?: JSX.Element;
