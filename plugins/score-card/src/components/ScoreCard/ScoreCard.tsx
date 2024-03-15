@@ -1,22 +1,6 @@
-/*
- * Copyright 2022 Oriflame
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import { Entity } from '@backstage/catalog-model';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { Chip, Grid } from '@material-ui/core';
+import { Chip, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import useAsync from 'react-use/lib/useAsync';
@@ -43,7 +27,6 @@ import { titleColumn } from './columns/titleColumn';
 import { getReviewerLink } from './sub-components/getReviewerLink';
 import { scoringDataApiRef } from '../../api';
 
-// lets prepare some styles
 const useStyles = makeStyles(theme => ({
   badgeLabel: {
     color: theme.palette.common.white,
@@ -59,7 +42,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-// data loader
 const useScoringDataLoader = () => {
   const errorApi = useApi(errorApiRef);
   const scorigDataApi = useApi(scoringDataApiRef);
@@ -78,14 +60,14 @@ const useScoringDataLoader = () => {
   }, [error, errorApi]);
 
   const wikiLinkTemplate =
-    config.getOptionalString('scorecards.wikiLinkTemplate') ??
-    '';
+    config.getOptionalString('scorecards.wikiLinkTemplate') ?? '';
 
   return { loading, value, wikiLinkTemplate, error };
 };
 
 export const ScoreCard = ({
   title,
+  subTitle,
   tableTitle,
   showError = true,
   emptyElement = <EmptyState
@@ -96,23 +78,16 @@ export const ScoreCard = ({
   variant = 'gridItem',
 }: {
   title?: string;
+  subTitle?: string;
   tableTitle?: string;
   entity?: Entity;
   emptyElement?: JSX.Element;
   showError?: boolean;
   variant?: InfoCardVariants;
 }) => {
-  // let's load the entity data from url defined in config etc
-  const {
-    loading,
-    error,
-    value: data,
-    wikiLinkTemplate,
-  } = useScoringDataLoader();
-
+  const { loading, error, value: data, wikiLinkTemplate } = useScoringDataLoader();
   const classes = useStyles();
 
-  // let's prepare the "chip" used in the up-right card corner
   let gateLabel = 'Not computed';
   const gateStyle = {
     margin: 0,
@@ -125,7 +100,6 @@ export const ScoreCard = ({
   }
   const qualityBadge = !loading && <Chip label={gateLabel} style={gateStyle} />;
 
-  // let's define the main table columns
   const columns: TableColumn<EntityScoreTableEntry>[] = [
     areaColumn(data),
     titleColumn(wikiLinkTemplate),
@@ -135,9 +109,17 @@ export const ScoreCard = ({
 
   const allEntries = getScoreTableEntries(data);
 
+  // Combinando título e subtítulo em um fragmento JSX para passar para InfoCard
+  const combinedTitle = (
+    <>
+      {title && <Typography variant="h6">{title}</Typography>}
+      {subTitle && <Typography variant="subtitle1">{subTitle}</Typography>}
+    </>
+  );
+
   return (
     <InfoCard
-      title={title ?? "Scoring"}
+      title={combinedTitle} // Passando o título combinado
       variant={variant}
       headerProps={{
         action: qualityBadge,
@@ -148,15 +130,10 @@ export const ScoreCard = ({
       }}
     >
       {loading && <Progress />}
-
       {showError && error && getWarningPanel(error)}
-
       {!loading && !data && (
-        <div data-testid="score-card-no-data">
-          {emptyElement}
-        </div>
+        <div data-testid="score-card-no-data">{emptyElement}</div>
       )}
-
       {!loading && data && (
         <div data-testid="score-card">
           <Grid
@@ -179,10 +156,9 @@ export const ScoreCard = ({
               columns={columns}
               data={allEntries}
               components={{
-                Groupbar: () => null, // we do not want to display possibility to change grouping
+                Groupbar: () => null,
               }}
             />
-
             {getReviewerLink(data)}
           </Grid>
         </div>
