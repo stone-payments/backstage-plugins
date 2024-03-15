@@ -27,7 +27,7 @@ import { ScoreCardTable } from '../ScoreCardTable';
 
 type ScoreBoardPageProps = {
   title?: string;
-  subTitle?: string;
+  subTitle?: JSX.Element | string;
   tableTitle?: string;
   entityLinkPath?: string;
   excludedColumns?: string[];
