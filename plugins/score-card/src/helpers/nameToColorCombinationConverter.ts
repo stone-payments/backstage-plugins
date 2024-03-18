@@ -11,9 +11,9 @@ const CUSTOM_COLOR_COMBINATION_INLINE_REGEXP: RegExp = /^#[0-9a-f]{6,8}\s+#[0-9a
 const defaultColorCombinations: { [name: string]: string[] } = {
   // Extra details colors based on score
   "extra-details-failure": ["#555555", "#CCCCCC"],
-  "extra-details-almost-failure": ["#741f1f", "#ffe8e8"],
-  "extra-details-partial": ["#741f1f", "#ffe8e8"],
-  "extra-details-almost-success": ["#741f1f", "#ffe8e8"],
+  "extra-details-almost-failure": ["#555555", "#CCCCCC"],
+  "extra-details-partial": ["#555555", "#CCCCCC"],
+  "extra-details-almost-success": ["#555555", "#CCCCCC"],
   "extra-details-success": ["#555555", "#CCCCCC"],
   "extra-details-unknown": ["#555555", "#CCCCCC"],
   // Score colors
