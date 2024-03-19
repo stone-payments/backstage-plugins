@@ -65,6 +65,86 @@ const websiteEntityPage = (
   </EntityLayout>
 );
 
+const workerEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
+const libraryEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
+const frontendEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
+const backendEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
+const mobileEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
+const infraascodeEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
+const cronjobEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
+const jobEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
+const repositoryEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
+const cliEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
 const defaultEntityPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
@@ -84,43 +164,43 @@ const componentPage = (
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('worker')}>
-      {websiteEntityPage}
+      {workerEntityPage}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('library')}>
-      {websiteEntityPage}
+      {libraryEntityPage}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('frontend')}>
-      {websiteEntityPage}
+      {frontendEntityPage}
     </EntitySwitch.Case>    
 
     <EntitySwitch.Case if={isComponentType('backend')}>
-      {websiteEntityPage}
+      {backendEntityPage}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('mobile')}>
-      {websiteEntityPage}
+      {mobileEntityPage}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('infra-as-code')}>
-      {websiteEntityPage}
+      {infraascodeEntityPage}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('cronjob')}>
-      {websiteEntityPage}
+      {cronjobEntityPage}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('job')}>
-      {websiteEntityPage}
+      {jobEntityPage}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('repository')}>
-      {websiteEntityPage}
+      {repositoryEntityPage}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('cli')}>
-      {websiteEntityPage}
+      {cliEntityPage}
     </EntitySwitch.Case>             
 
 
